@@ -559,13 +559,13 @@ h1,h2,h3{ font-family:var(--font-serif); font-weight:700; margin:0; line-height:
           <p class="eyebrow">Newsletter</p>
           <h2 style="font-size:clamp(1.5rem,2.4vw,1.9rem); margin-top:8px;">New arrivals, occasionally.</h2>
         </div>
-        <form action="#" method="post" style="flex:1; min-width:260px; max-width:460px;">
+        <form action="https://formspree.io/f/xjyvzgvg" method="POST" id="newsletterForm" style="flex:1; min-width:260px; max-width:460px;">
           <label for="orEmail" style="position:absolute; left:-9999px;">Email address</label>
           <div class="newsletter">
             <input type="email" id="orEmail" name="email" placeholder="you@example.com" required autocomplete="email">
-            <button type="submit" class="btn btn-solid">Sign Up</button>
+            <button type="submit" class="btn btn-solid" id="newsletterSubmit">Sign Up</button>
           </div>
-          <p class="newsletter-note"><!-- Connect to a real email provider --> No spam. Unsubscribe anytime.</p>
+          <p class="newsletter-note" id="newsletterNote">No spam. Unsubscribe anytime.</p>
         </form>
       </div>
     </div>
@@ -736,6 +736,41 @@ h1,h2,h3{ font-family:var(--font-serif); font-weight:700; margin:0; line-height:
     cartCount += 1;
     cartCountEl.textContent = cartCount;
     addCartNote.classList.add("is-visible");
+  });
+
+  // Newsletter form (Formspree, AJAX)
+  var newsletterForm = document.getElementById("newsletterForm");
+  var newsletterNote = document.getElementById("newsletterNote");
+  var newsletterSubmit = document.getElementById("newsletterSubmit");
+  var newsletterNoteDefault = newsletterNote.textContent;
+
+  newsletterForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    newsletterSubmit.disabled = true;
+    newsletterNote.textContent = "Signing you up…";
+    newsletterNote.style.color = "";
+
+    fetch(newsletterForm.action, {
+      method: "POST",
+      body: new FormData(newsletterForm),
+      headers: { "Accept": "application/json" }
+    }).then(function (response) {
+      if (response.ok) {
+        newsletterForm.reset();
+        newsletterNote.textContent = "Thanks — you're on the list.";
+      } else {
+        return response.json().then(function (data) {
+          var message = (data && data.errors && data.errors.length) ? data.errors.map(function (er) { return er.message; }).join(", ") : "Something went wrong. Please try again.";
+          newsletterNote.textContent = message;
+          newsletterNote.style.color = "#b3261e";
+        });
+      }
+    }).catch(function () {
+      newsletterNote.textContent = "Something went wrong. Please try again.";
+      newsletterNote.style.color = "#b3261e";
+    }).finally(function () {
+      newsletterSubmit.disabled = false;
+    });
   });
 
   // Scroll reveal
