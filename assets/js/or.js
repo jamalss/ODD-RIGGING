@@ -13,10 +13,18 @@
      ------------------------------------------------------------------ */
   var OR_CONFIG = {
     whatsappNumber: "17587235872",
-    currency: "EC$",            // CONFIRM: EC$ assumed. Change here only.
-    deliveryFee: 5,             // Islandwide Saint Lucia delivery fee
-    deliveryText: "Islandwide delivery in Saint Lucia, 2–3 days. Cash on delivery.",
-    sizes: ["S", "M", "L", "XL", "2XL"],
+    currency: "US$",            // all prices are shown in USD
+    // Standard price for EVERY design. A card can override with data-prices="3XL:32.99" etc.
+    prices: { "S": 26.99, "M": 26.99, "L": 26.99, "XL": 26.99, "2XL": 28.99, "3XL": 30.99 },
+    sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
+    // Local shipping & handling (Saint Lucia). Customer picks one in the cart.
+    shipping: {
+      delivery: { label: "Delivery", fee: 1.84, note: "Islandwide, 2–3 days. Cash on delivery." },
+      pickup:   { label: "Pickup",   fee: 0,    note: "Free. Cash on pickup." }
+    },
+    defaultShipping: "delivery",
+    shippingKey: "or-shipping-v1",
+    deliveryText: "Islandwide delivery in Saint Lucia, 2–3 days, or free pickup. Cash on delivery or pickup.",
     maxQty: 20,
     maxLines: 30,
     storageKey: "or-order-v1",
@@ -42,12 +50,15 @@
   }
 
   function money(n) {
-    var fixed = Math.round(n * 100) / 100;
-    return OR_CONFIG.currency + (fixed % 1 === 0 ? String(fixed) : fixed.toFixed(2));
+    return OR_CONFIG.currency + (Math.round(n * 100) / 100).toFixed(2);
+  }
+  function feeText(method) {
+    var m = OR_CONFIG.shipping[method];
+    return m.fee > 0 ? money(m.fee) : "Free";
   }
 
   /* ---------- fill config-driven text (delivery fee etc.) ---------- */
-  $$("[data-or='delivery-fee']").forEach(function (el) { el.textContent = money(OR_CONFIG.deliveryFee); });
+  $$("[data-or='delivery-fee']").forEach(function (el) { el.textContent = money(OR_CONFIG.shipping.delivery.fee); });
   $$("[data-or='delivery-text']").forEach(function (el) { el.textContent = OR_CONFIG.deliveryText; });
   $$("[data-or='year']").forEach(function (el) { el.textContent = String(new Date().getFullYear()); });
 
@@ -95,7 +106,7 @@
   function cleanLine(x) {
     if (!x || typeof x !== "object") return null;
     var id = typeof x.id === "string" ? x.id.slice(0, 40) : "";
-    var name = typeof x.name === "string" ? x.name.slice(0, 80) : "";
+    var name = typeof x.name === "string" ? x.name.slice(0, 100) : "";
     var size = typeof x.size === "string" ? x.size : "";
     var qty = parseInt(x.qty, 10);
     var price = (typeof x.price === "number" && isFinite(x.price) && x.price >= 0) ? x.price : null;
@@ -120,6 +131,19 @@
   function itemCount() { return order.reduce(function (n, l) { return n + l.qty; }, 0); }
 
   /* ---------- WhatsApp message ---------- */
+  /* ---------- shipping method (delivery / pickup) ---------- */
+  function loadShipping() {
+    try { var v = window.localStorage.getItem(OR_CONFIG.shippingKey); if (OR_CONFIG.shipping[v]) return v; } catch (e) {}
+    return OR_CONFIG.defaultShipping;
+  }
+  var shipping = loadShipping();
+  function setShipping(v) {
+    if (!OR_CONFIG.shipping[v]) return;
+    shipping = v;
+    try { window.localStorage.setItem(OR_CONFIG.shippingKey, v); } catch (e) {}
+    render();
+  }
+
   function buildMessage() {
     var rule = "------------------------------";
     var lines = ["*ODD RIGGING ORDER*", rule];
@@ -134,16 +158,15 @@
     });
     lines.push(rule);
     lines.push("Items: " + qtyTotal);
-    if (allPriced) {
-      lines.push("Subtotal: " + money(subtotal));
-      lines.push("Delivery: " + money(OR_CONFIG.deliveryFee));
-      lines.push("*TOTAL: " + money(subtotal + OR_CONFIG.deliveryFee) + "* (cash on delivery)");
-    } else {
-      lines.push("*TOTAL: to confirm* (cash on delivery)");
-    }
+    var ship = OR_CONFIG.shipping[shipping];
+    var pay = shipping === "pickup" ? "cash on pickup" : "cash on delivery";
+    if (allPriced) lines.push("Subtotal: " + money(subtotal));
+    lines.push("Shipping & handling: " + ship.label + " – " + feeText(shipping));
+    lines.push("(Pickup – Free · Delivery – " + money(OR_CONFIG.shipping.delivery.fee) + ")");
+    lines.push(allPriced ? "*TOTAL: " + money(subtotal + ship.fee) + "* (" + pay + ")" : "*TOTAL: to confirm* (" + pay + ")");
     lines.push("");
     lines.push("My name: ");
-    lines.push("Delivery area: ");
+    if (shipping === "delivery") lines.push("Delivery area: ");
     lines.push("");
     lines.push("Ordered via: " + OR_CONFIG.siteUrl);
     return lines.join("\n");
@@ -158,7 +181,7 @@
     $("#ob-items").textContent = count + (count === 1 ? " item" : " items") + " · " + nStyles + (nStyles === 1 ? " design" : " designs");
     var allPriced = order.every(function (l) { return l.price !== null; });
     var sub = order.reduce(function (n, l) { return n + (l.price || 0) * l.qty; }, 0);
-    $("#ob-total").textContent = allPriced ? money(sub) + " + delivery" : "Total to confirm";
+    $("#ob-total").textContent = allPriced ? money(sub + OR_CONFIG.shipping[shipping].fee) + " total" : "Total to confirm";
     var send = $("#ob-send");
     if (count > 0) send.href = "https://wa.me/" + OR_CONFIG.whatsappNumber + "?text=" + encodeURIComponent(buildMessage());
     bar.classList.toggle("visible", count > 0);
@@ -231,8 +254,9 @@
 
     if (hasItems) {
       $("#sum-items").textContent = allPriced ? money(subtotal) : "To confirm";
-      $("#sum-delivery").textContent = money(OR_CONFIG.deliveryFee);
-      $("#sum-total").textContent = allPriced ? money(subtotal + OR_CONFIG.deliveryFee) : "To confirm";
+      $("#sum-delivery-label").textContent = OR_CONFIG.shipping[shipping].label;
+      $("#sum-delivery").textContent = feeText(shipping);
+      $("#sum-total").textContent = allPriced ? money(subtotal + OR_CONFIG.shipping[shipping].fee) : "To confirm";
       sendEl.href = "https://wa.me/" + OR_CONFIG.whatsappNumber + "?text=" + encodeURIComponent(buildMessage());
       sendEl.removeAttribute("aria-disabled");
       sendEl.removeAttribute("tabindex");
@@ -311,7 +335,11 @@
       if (m && allowedSizes[m[1]]) perSize[m[1]] = parseFloat(m[2]);
     });
     var prices = {};
-    sizes.forEach(function (s) { prices[s] = perSize[s] !== undefined ? perSize[s] : basePrice; });
+    sizes.forEach(function (s) {
+      if (perSize[s] !== undefined) prices[s] = perSize[s];
+      else if (basePrice !== null) prices[s] = basePrice;
+      else prices[s] = typeof OR_CONFIG.prices[s] === "number" ? OR_CONFIG.prices[s] : null;
+    });
     var tp = (card.getAttribute("data-teepublic") || "").trim();
     return {
       id: /^[a-z0-9-]+$/.test(id) ? id : "",
@@ -480,7 +508,7 @@
         announce("Choose a size for " + d.name + " first.");
         return;
       }
-      setLine({ id: d.id, name: d.name, size: dr.size, qty: dr.qty, price: d.prices[dr.size] });
+      setLine({ id: d.id, name: d.cartName, size: dr.size, qty: dr.qty, price: d.prices[dr.size] });
       closePanel(card, true);
       announce("Added " + d.name + ", size " + dr.size + ", quantity " + dr.qty + ". Order has " + itemCount() + " items.");
     });
@@ -492,6 +520,9 @@
     var d = parseCard(card);
     if (!d.id || !d.name) return;
     card._or = d;
+    // cart/WhatsApp name includes the collection, so "Design 04" in two collections can't be confused
+    var kicker = $(".ch-kicker");
+    d.cartName = (d.name + (kicker ? " · " + kicker.textContent.trim() : "")).slice(0, 100);
 
     var priceEl = $(".product-price", card);
     if (priceEl) priceEl.textContent = priceLabel(d);
@@ -557,6 +588,11 @@
     } else if (btn) {
       btn.disabled = true;
     }
+  });
+
+  $$("input[name='or-shipping']").forEach(function (r) {
+    r.checked = r.value === shipping;
+    r.addEventListener("change", function () { if (r.checked) { setShipping(r.value); announce(OR_CONFIG.shipping[r.value].label + " selected."); } });
   });
 
   // keep the cart in step if another tab changes it
