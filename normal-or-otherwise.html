@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self' https://app.kit.com; frame-src 'none'; object-src 'none'; base-uri 'self'; manifest-src 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Normal or Otherwise | ODD RIGGING</title>
-<meta name="description" content="Normal or Otherwise: T-shirts by ODD RIGGING, sizes S to 2XL. Order on WhatsApp for islandwide Saint Lucia delivery, or buy on TeePublic.">
+<meta name="description" content="Normal or Otherwise: T-shirts by ODD RIGGING, sizes S to 3XL, from US$26.99. Order on WhatsApp in Saint Lucia or on TeePublic.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://oddrigging.store/normal-or-otherwise.html">
 <meta name="theme-color" content="#111111">
@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="ODD RIGGING">
 <meta property="og:locale" content="en_US">
 <meta property="og:title" content="Normal or Otherwise | ODD RIGGING">
-<meta property="og:description" content="Normal or Otherwise: T-shirts by ODD RIGGING, sizes S to 2XL. Order on WhatsApp for islandwide Saint Lucia delivery, or buy on TeePublic.">
+<meta property="og:description" content="Normal or Otherwise: T-shirts by ODD RIGGING, sizes S to 3XL, from US$26.99. Order on WhatsApp in Saint Lucia or on TeePublic.">
 <meta property="og:url" content="https://oddrigging.store/normal-or-otherwise.html">
 <!-- ASSET NEEDED: images/og-cover.jpg, exactly 1200x630 -->
 <meta property="og:image" content="https://oddrigging.store/images/og-cover.jpg">
@@ -24,7 +24,7 @@
 <meta property="og:image:alt" content="ODD RIGGING wordmark and OR mark">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Normal or Otherwise | ODD RIGGING">
-<meta name="twitter:description" content="Normal or Otherwise: T-shirts by ODD RIGGING, sizes S to 2XL. Order on WhatsApp for islandwide Saint Lucia delivery, or buy on TeePublic.">
+<meta name="twitter:description" content="Normal or Otherwise: T-shirts by ODD RIGGING, sizes S to 3XL, from US$26.99. Order on WhatsApp in Saint Lucia or on TeePublic.">
 <meta name="twitter:image" content="https://oddrigging.store/images/og-cover.jpg">
 
 <!-- Full favicon set + site.webmanifest come in the SEO stage -->
@@ -127,7 +127,7 @@
       <div class="ch-grid">
         <div class="ch-copy">
           <h1 id="page-h"><span class="ch-kicker">OR-NORMAL COLLECTION</span> <span class="ch-headline">Normal or Otherwise</span></h1>
-          <!-- SUBLINE: one short line, supplied later -->
+          <p class="ch-sub">Questioning your normal with reason.</p>
           <a href="#designs" class="btn btn-light">Explore the Collection</a>
         </div>
         <!-- ARTWORK ZONE: shows the images of designs 03, 05 and 06. Decorative (the cards below carry the real descriptions). -->
@@ -148,97 +148,128 @@
         <p>Humorous observations questioning what society considers normal. Often uses vintage cartoon characters, personality-driven illustrations, irony, and confident statements about everyday life.</p>
       </div>
 
-      <!-- ================= DESIGN CARD TEMPLATE =================
-           data-id:        the slot id, e.g. normal-or-otherwise-01 (also the image file name)
-           data-price:     one price for every size, number only, e.g. 85
-                           (currency is set once in assets/js/or.js). Empty = "Price to be confirmed"
-           data-prices:    OPTIONAL per-size prices, e.g. "2XL:95" or "S:85,M:85,L:85,XL:85,2XL:95"
-                           (any size not listed uses data-price)
-           data-sizes:     OPTIONAL, e.g. "S,M,L" (leave out to offer S to 2XL)
-           data-teepublic: full https://www.teepublic.com/... link.
-                           Empty = the Buy on TeePublic button shows greyed out.
+      <!-- ================= HOW TO FILL A DESIGN CARD =================
+           Every card below already has ordering built in. Per design, edit only:
+             1. the name in <h3 class="product-name">
+             2. the description: un-comment <p class="product-desc">
+             3. the image alt text ("describe the design")
+             4. data-teepublic="https://www.teepublic.com/..." (empty = greyed-out button)
+           and add images/<data-id>.webp + .jpg (1200x1500).
+           Prices and sizes come from assets/js/or.js (S-XL US$26.99, 2XL US$28.99, 3XL US$30.99).
+           Optional per-card overrides: data-sizes="S,M,L"  data-prices="3XL:32.99"
+      ========================================================== -->
+      <ul class="product-grid">
+        <!-- DESIGN 01: replace "Design 01", add a description and drop images/normal-or-otherwise-01.webp + .jpg into /images -->
         <li>
-          <article class="product" data-id="normal-or-otherwise-01" data-price="" data-teepublic="">
+          <article class="product" data-id="normal-or-otherwise-01" data-teepublic="">
             <div class="product-media">
+              <span class="media-fallback">Artwork coming soon</span>
               <picture>
                 <source srcset="images/normal-or-otherwise-01.webp" type="image/webp">
-                <img src="images/normal-or-otherwise-01.jpg" alt="DESCRIBE THE DESIGN" width="1200" height="1500" loading="lazy" decoding="async">
+                <img src="images/normal-or-otherwise-01.jpg" alt="Design 01 T-shirt artwork, Normal or Otherwise collection" width="1200" height="1500" loading="lazy" decoding="async">
               </picture>
             </div>
             <div class="product-body">
-              <p class="product-num">Design 01</p>
-              <h3 class="product-name">DESIGN NAME</h3>
-              <p class="product-desc">ONE OR TWO SENTENCES ABOUT THE DESIGN</p>
+              <p class="product-num">OR-NORMAL COLLECTION &middot; 01</p>
+              <h3 class="product-name">Design 01</h3>
+              <!-- <p class="product-desc">ONE OR TWO SENTENCES ABOUT THE DESIGN</p> -->
               <p class="product-price"></p>
               <p class="size-dots"></p>
             </div>
           </article>
         </li>
-      ========================================================== -->
-      <ul class="product-grid">
-        <!-- SLOT 01 — coming soon. To fill it, replace this <li> with the DESIGN CARD TEMPLATE above,
-             using data-id="normal-or-otherwise-01" and images/normal-or-otherwise-01.webp / .jpg -->
+        <!-- DESIGN 02: replace "Design 02", add a description and drop images/normal-or-otherwise-02.webp + .jpg into /images -->
         <li>
-          <article class="product is-coming">
-            <div class="product-media is-empty"><span>Coming soon</span></div>
+          <article class="product" data-id="normal-or-otherwise-02" data-teepublic="">
+            <div class="product-media">
+              <span class="media-fallback">Artwork coming soon</span>
+              <picture>
+                <source srcset="images/normal-or-otherwise-02.webp" type="image/webp">
+                <img src="images/normal-or-otherwise-02.jpg" alt="Design 02 T-shirt artwork, Normal or Otherwise collection" width="1200" height="1500" loading="lazy" decoding="async">
+              </picture>
+            </div>
             <div class="product-body">
-              <p class="product-num">Design 01</p>
-              <p class="product-coming">Design coming soon</p>
+              <p class="product-num">OR-NORMAL COLLECTION &middot; 02</p>
+              <h3 class="product-name">Design 02</h3>
+              <!-- <p class="product-desc">ONE OR TWO SENTENCES ABOUT THE DESIGN</p> -->
+              <p class="product-price"></p>
+              <p class="size-dots"></p>
             </div>
           </article>
         </li>
-        <!-- SLOT 02 — coming soon. To fill it, replace this <li> with the DESIGN CARD TEMPLATE above,
-             using data-id="normal-or-otherwise-02" and images/normal-or-otherwise-02.webp / .jpg -->
+        <!-- DESIGN 03: replace "Design 03", add a description and drop images/normal-or-otherwise-03.webp + .jpg into /images -->
         <li>
-          <article class="product is-coming">
-            <div class="product-media is-empty"><span>Coming soon</span></div>
+          <article class="product" data-id="normal-or-otherwise-03" data-teepublic="">
+            <div class="product-media">
+              <span class="media-fallback">Artwork coming soon</span>
+              <picture>
+                <source srcset="images/normal-or-otherwise-03.webp" type="image/webp">
+                <img src="images/normal-or-otherwise-03.jpg" alt="Design 03 T-shirt artwork, Normal or Otherwise collection" width="1200" height="1500" loading="lazy" decoding="async">
+              </picture>
+            </div>
             <div class="product-body">
-              <p class="product-num">Design 02</p>
-              <p class="product-coming">Design coming soon</p>
+              <p class="product-num">OR-NORMAL COLLECTION &middot; 03</p>
+              <h3 class="product-name">Design 03</h3>
+              <!-- <p class="product-desc">ONE OR TWO SENTENCES ABOUT THE DESIGN</p> -->
+              <p class="product-price"></p>
+              <p class="size-dots"></p>
             </div>
           </article>
         </li>
-        <!-- SLOT 03 — coming soon. To fill it, replace this <li> with the DESIGN CARD TEMPLATE above,
-             using data-id="normal-or-otherwise-03" and images/normal-or-otherwise-03.webp / .jpg -->
+        <!-- DESIGN 04: replace "Design 04", add a description and drop images/normal-or-otherwise-04.webp + .jpg into /images -->
         <li>
-          <article class="product is-coming">
-            <div class="product-media is-empty"><span>Coming soon</span></div>
+          <article class="product" data-id="normal-or-otherwise-04" data-teepublic="">
+            <div class="product-media">
+              <span class="media-fallback">Artwork coming soon</span>
+              <picture>
+                <source srcset="images/normal-or-otherwise-04.webp" type="image/webp">
+                <img src="images/normal-or-otherwise-04.jpg" alt="Design 04 T-shirt artwork, Normal or Otherwise collection" width="1200" height="1500" loading="lazy" decoding="async">
+              </picture>
+            </div>
             <div class="product-body">
-              <p class="product-num">Design 03</p>
-              <p class="product-coming">Design coming soon</p>
+              <p class="product-num">OR-NORMAL COLLECTION &middot; 04</p>
+              <h3 class="product-name">Design 04</h3>
+              <!-- <p class="product-desc">ONE OR TWO SENTENCES ABOUT THE DESIGN</p> -->
+              <p class="product-price"></p>
+              <p class="size-dots"></p>
             </div>
           </article>
         </li>
-        <!-- SLOT 04 — coming soon. To fill it, replace this <li> with the DESIGN CARD TEMPLATE above,
-             using data-id="normal-or-otherwise-04" and images/normal-or-otherwise-04.webp / .jpg -->
+        <!-- DESIGN 05: replace "Design 05", add a description and drop images/normal-or-otherwise-05.webp + .jpg into /images -->
         <li>
-          <article class="product is-coming">
-            <div class="product-media is-empty"><span>Coming soon</span></div>
+          <article class="product" data-id="normal-or-otherwise-05" data-teepublic="">
+            <div class="product-media">
+              <span class="media-fallback">Artwork coming soon</span>
+              <picture>
+                <source srcset="images/normal-or-otherwise-05.webp" type="image/webp">
+                <img src="images/normal-or-otherwise-05.jpg" alt="Design 05 T-shirt artwork, Normal or Otherwise collection" width="1200" height="1500" loading="lazy" decoding="async">
+              </picture>
+            </div>
             <div class="product-body">
-              <p class="product-num">Design 04</p>
-              <p class="product-coming">Design coming soon</p>
+              <p class="product-num">OR-NORMAL COLLECTION &middot; 05</p>
+              <h3 class="product-name">Design 05</h3>
+              <!-- <p class="product-desc">ONE OR TWO SENTENCES ABOUT THE DESIGN</p> -->
+              <p class="product-price"></p>
+              <p class="size-dots"></p>
             </div>
           </article>
         </li>
-        <!-- SLOT 05 — coming soon. To fill it, replace this <li> with the DESIGN CARD TEMPLATE above,
-             using data-id="normal-or-otherwise-05" and images/normal-or-otherwise-05.webp / .jpg -->
+        <!-- DESIGN 06: replace "Design 06", add a description and drop images/normal-or-otherwise-06.webp + .jpg into /images -->
         <li>
-          <article class="product is-coming">
-            <div class="product-media is-empty"><span>Coming soon</span></div>
-            <div class="product-body">
-              <p class="product-num">Design 05</p>
-              <p class="product-coming">Design coming soon</p>
+          <article class="product" data-id="normal-or-otherwise-06" data-teepublic="">
+            <div class="product-media">
+              <span class="media-fallback">Artwork coming soon</span>
+              <picture>
+                <source srcset="images/normal-or-otherwise-06.webp" type="image/webp">
+                <img src="images/normal-or-otherwise-06.jpg" alt="Design 06 T-shirt artwork, Normal or Otherwise collection" width="1200" height="1500" loading="lazy" decoding="async">
+              </picture>
             </div>
-          </article>
-        </li>
-        <!-- SLOT 06 — coming soon. To fill it, replace this <li> with the DESIGN CARD TEMPLATE above,
-             using data-id="normal-or-otherwise-06" and images/normal-or-otherwise-06.webp / .jpg -->
-        <li>
-          <article class="product is-coming">
-            <div class="product-media is-empty"><span>Coming soon</span></div>
             <div class="product-body">
-              <p class="product-num">Design 06</p>
-              <p class="product-coming">Design coming soon</p>
+              <p class="product-num">OR-NORMAL COLLECTION &middot; 06</p>
+              <h3 class="product-name">Design 06</h3>
+              <!-- <p class="product-desc">ONE OR TWO SENTENCES ABOUT THE DESIGN</p> -->
+              <p class="product-price"></p>
+              <p class="size-dots"></p>
             </div>
           </article>
         </li>
@@ -264,11 +295,11 @@
           <p>Your order is written into a WhatsApp message for you. Add your name and delivery area, then send it. We confirm your order on WhatsApp.</p>
         </li>
         <li>
-          <h3>Pay when it arrives</h3>
-          <p>Islandwide delivery in Saint Lucia within 2&ndash;3 days. Delivery is <span data-or="delivery-fee">EC$5</span>. Cash on delivery.</p>
+          <h3>Delivery or pickup, pay in cash</h3>
+          <p>Islandwide delivery in Saint Lucia within 2&ndash;3 days for <span data-or="delivery-fee">US$1.84</span>, or free pickup. Pay cash on delivery or at pickup. All prices are in USD.</p>
         </li>
       </ol>
-      <p class="abroad">Outside Saint Lucia? Order through TeePublic using the Buy on TeePublic button on each design.</p>
+      <p class="abroad">Outside Saint Lucia? Order through TeePublic using the Buy on TeePublic button on each design or contact us via <a href="https://wa.me/17587235872?text=Hi%20ODD%20RIGGING%2C%20I%27m%20outside%20Saint%20Lucia%20and%20would%20like%20more%20info." target="_blank" rel="noopener noreferrer">WhatsApp<span class="vh"> (opens WhatsApp)</span></a> or <a href="mailto:hello@oddrigging.store">Email</a> for more info.</p>
     </div>
   </section>
 
@@ -280,9 +311,9 @@
       <ul class="other-collections">
         <li><a href="common-sense.html">Common Sense</a></li>
         <li><a href="normal-or-otherwise.html" aria-current="page">Normal or Otherwise</a></li>
-        <li><a href="human-behaviour.html">Human Behaviour</a></li>
+        <li><a href="human-behaviour.html">Humor in Human Behaviour</a></li>
         <li><a href="transferware.html">Victorian Transferware Absurdities</a></li>
-        <li><a href="pixel-art.html">Pixel-Art Observations</a></li>
+        <li><a href="pixel-art.html">Pixel Art Observations</a></li>
         <li><a href="tea.html">Tea &amp; Social Observations</a></li>
       </ul>
     </div>
@@ -350,11 +381,16 @@
     <p id="cart-empty" class="cart-empty">Your order is empty. Choose a design and size to start.</p>
     <ul id="cart-lines" class="cart-lines" aria-label="Items in your order"></ul>
     <div id="cart-summary" class="cart-summary" hidden>
+      <fieldset class="ship-choice">
+        <legend>Shipping &amp; handling (Saint Lucia)</legend>
+        <label class="ship-opt"><input type="radio" name="or-shipping" value="delivery"><span><strong>Delivery &ndash; US$1.84</strong><small>Islandwide, 2&ndash;3 days. Cash on delivery.</small></span></label>
+        <label class="ship-opt"><input type="radio" name="or-shipping" value="pickup"><span><strong>Pickup &ndash; Free</strong><small>Cash on pickup.</small></span></label>
+      </fieldset>
       <div><span>Items</span><span id="sum-items"></span></div>
-      <div><span>Delivery</span><span id="sum-delivery"></span></div>
-      <div class="total"><span>Total</span><span id="sum-total"></span></div>
+      <div><span id="sum-delivery-label">Delivery</span><span id="sum-delivery"></span></div>
+      <div class="total"><span>Total (USD)</span><span id="sum-total"></span></div>
     </div>
-    <p class="cart-note"><span data-or="delivery-text">Islandwide delivery in Saint Lucia, 2&ndash;3 days. Cash on delivery.</span> Outside Saint Lucia? Use Buy on TeePublic on each design.</p>
+    <p class="cart-note">Outside Saint Lucia? Order through TeePublic using the Buy on TeePublic button on each design or contact us via <a href="https://wa.me/17587235872?text=Hi%20ODD%20RIGGING%2C%20I%27m%20outside%20Saint%20Lucia%20and%20would%20like%20more%20info." target="_blank" rel="noopener noreferrer">WhatsApp<span class="vh"> (opens WhatsApp)</span></a> or <a href="mailto:hello@oddrigging.store">Email</a> for more info.</p>
     <div class="cart-actions">
       <a id="cart-send" class="btn btn-solid btn-block" aria-disabled="true" tabindex="-1" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" focusable="false"><use href="assets/icons/icons.svg#i-whatsapp"></use></svg>Send order on WhatsApp<span class="vh"> (opens WhatsApp)</span></a>
       <p id="cart-sent" class="cart-sent" hidden>WhatsApp should now be open with your order. Once you have sent it, you can clear this order.</p>

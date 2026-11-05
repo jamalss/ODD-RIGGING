@@ -163,7 +163,7 @@
             <!-- OPTIONAL TILE IMAGE (4:3): <div class="tile-media"><picture>...</picture></div> -->
             <div>
               <p class="tile-code">OR-HUMAN BEHAVIOUR COLLECTION</p>
-              <h3>Human Behaviour</h3>
+              <h3>Humor in Human Behaviour</h3>
             </div>
             <p class="tile-meta">Designs coming soon</p>
           </a>
@@ -183,7 +183,7 @@
             <!-- OPTIONAL TILE IMAGE (4:3): <div class="tile-media"><picture>...</picture></div> -->
             <div>
               <p class="tile-code">OR-8BIT COLLECTION</p>
-              <h3>Pixel-Art Observations</h3>
+              <h3>Pixel Art Observations</h3>
             </div>
             <p class="tile-meta">Designs coming soon</p>
           </a>
@@ -248,11 +248,11 @@
           <p>Your order is written into a WhatsApp message for you. Add your name and delivery area, then send it. We confirm your order on WhatsApp.</p>
         </li>
         <li>
-          <h3>Pay when it arrives</h3>
-          <p>Islandwide delivery in Saint Lucia within 2&ndash;3 days. Delivery is <span data-or="delivery-fee">EC$5</span>. Cash on delivery.</p>
+          <h3>Delivery or pickup, pay in cash</h3>
+          <p>Islandwide delivery in Saint Lucia within 2&ndash;3 days for <span data-or="delivery-fee">US$1.84</span>, or free pickup. Pay cash on delivery or at pickup. All prices are in USD.</p>
         </li>
       </ol>
-      <p class="abroad">Outside Saint Lucia? Order through TeePublic using the Buy on TeePublic button on each design.</p>
+      <p class="abroad">Outside Saint Lucia? Order through TeePublic using the Buy on TeePublic button on each design or contact us via <a href="https://wa.me/17587235872?text=Hi%20ODD%20RIGGING%2C%20I%27m%20outside%20Saint%20Lucia%20and%20would%20like%20more%20info." target="_blank" rel="noopener noreferrer">WhatsApp<span class="vh"> (opens WhatsApp)</span></a> or <a href="mailto:hello@oddrigging.store">Email</a> for more info.</p>
     </div>
   </section>
 
@@ -338,11 +338,16 @@
     <p id="cart-empty" class="cart-empty">Your order is empty. Choose a design and size to start.</p>
     <ul id="cart-lines" class="cart-lines" aria-label="Items in your order"></ul>
     <div id="cart-summary" class="cart-summary" hidden>
+      <fieldset class="ship-choice">
+        <legend>Shipping &amp; handling (Saint Lucia)</legend>
+        <label class="ship-opt"><input type="radio" name="or-shipping" value="delivery"><span><strong>Delivery &ndash; US$1.84</strong><small>Islandwide, 2&ndash;3 days. Cash on delivery.</small></span></label>
+        <label class="ship-opt"><input type="radio" name="or-shipping" value="pickup"><span><strong>Pickup &ndash; Free</strong><small>Cash on pickup.</small></span></label>
+      </fieldset>
       <div><span>Items</span><span id="sum-items"></span></div>
-      <div><span>Delivery</span><span id="sum-delivery"></span></div>
-      <div class="total"><span>Total</span><span id="sum-total"></span></div>
+      <div><span id="sum-delivery-label">Delivery</span><span id="sum-delivery"></span></div>
+      <div class="total"><span>Total (USD)</span><span id="sum-total"></span></div>
     </div>
-    <p class="cart-note"><span data-or="delivery-text">Islandwide delivery in Saint Lucia, 2&ndash;3 days. Cash on delivery.</span> Outside Saint Lucia? Use Buy on TeePublic on each design.</p>
+    <p class="cart-note">Outside Saint Lucia? Order through TeePublic using the Buy on TeePublic button on each design or contact us via <a href="https://wa.me/17587235872?text=Hi%20ODD%20RIGGING%2C%20I%27m%20outside%20Saint%20Lucia%20and%20would%20like%20more%20info." target="_blank" rel="noopener noreferrer">WhatsApp<span class="vh"> (opens WhatsApp)</span></a> or <a href="mailto:hello@oddrigging.store">Email</a> for more info.</p>
     <div class="cart-actions">
       <a id="cart-send" class="btn btn-solid btn-block" aria-disabled="true" tabindex="-1" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" focusable="false"><use href="assets/icons/icons.svg#i-whatsapp"></use></svg>Send order on WhatsApp<span class="vh"> (opens WhatsApp)</span></a>
       <p id="cart-sent" class="cart-sent" hidden>WhatsApp should now be open with your order. Once you have sent it, you can clear this order.</p>
