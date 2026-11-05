@@ -132,6 +132,8 @@ dialog::backdrop{background:rgba(17,17,17,.5);}
 .qty output{min-width:2ch;text-align:center;font-weight:600;}
 .cart-summary{margin-top:20px;display:grid;gap:6px;}
 .cart-summary div{display:flex;justify-content:space-between;gap:12px;}
+.cart-summary .sum-ec{color:var(--ink-2);font-weight:600;}
+.cart-summary .sum-ec small{font-weight:400;}
 .cart-summary .total{font-weight:700;font-size:1.1rem;padding-top:8px;border-top:1px solid var(--black);}
 .cart-note{font-size:.88rem;color:var(--ink-2);margin-top:14px;}
 .cart-actions{margin-top:auto;padding-top:24px;display:grid;gap:12px;}
@@ -325,9 +327,24 @@ ul.product-grid > li{display:flex;}
 .op-qty-num{min-width:40px;text-align:center;font-weight:700;}
 .op-subtotal{display:flex;justify-content:space-between;align-items:center;background:var(--ivory);padding:10px 12px;}
 .op-subtotal-label{font-size:.88rem;color:var(--ink-2);}
+.op-subtotal-amounts{display:flex;flex-direction:column;align-items:flex-end;}
+.op-subtotal-ec{font-size:.8rem;color:var(--ink-2);font-weight:600;}
 .op-subtotal-amount{font-family:var(--serif);font-weight:700;font-size:1.2rem;}
 .op-tp[aria-disabled="true"]{opacity:1;color:#6E6E6E;border-color:#C9C5BA;background:#EDEBE5;cursor:not-allowed;}
 .op-tp[aria-disabled="true"]:hover{background:#EDEBE5;color:#6E6E6E;}
+
+.media-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-2);font-size:.9rem;z-index:0;}
+.product-media picture,.product-media img{position:relative;z-index:1;}
+.abroad a,.cart-note a{font-weight:600;text-underline-offset:3px;}
+
+/* shipping choice in cart */
+.ship-choice{border:0;margin:0 0 8px;padding:0;display:grid;gap:8px;}
+.ship-choice legend{padding:0;margin-bottom:8px;font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);}
+.ship-opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1.5px solid var(--line);cursor:pointer;}
+.ship-opt:has(input:checked){border-color:var(--black);background:var(--white);}
+.ship-opt input{margin-top:4px;accent-color:var(--black);width:18px;height:18px;flex:none;}
+.ship-opt span{display:flex;flex-direction:column;}
+.ship-opt small{color:var(--ink-2);font-size:.85rem;}
 
 /* ---------- floating order bar ---------- */
 .order-bar{
