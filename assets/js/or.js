@@ -14,17 +14,18 @@
   var OR_CONFIG = {
     whatsappNumber: "17587235872",
     currency: "US$",            // all prices are shown in USD
+    ecRate: 2.70,               // EC$ per US$1 (official ECCB peg). EC$ amounts are shown for local customers.
     // Standard price for EVERY design. A card can override with data-prices="3XL:32.99" etc.
     prices: { "S": 26.99, "M": 26.99, "L": 26.99, "XL": 26.99, "2XL": 28.99, "3XL": 30.99 },
     sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
     // Local shipping & handling (Saint Lucia). Customer picks one in the cart.
     shipping: {
       delivery: { label: "Delivery", fee: 1.84, note: "Islandwide, 2–3 days. Cash on delivery." },
-      pickup:   { label: "Pickup",   fee: 0,    note: "Free. Cash on pickup." }
+      pickup:   { label: "Pickup",   fee: 0,    note: "Free. Cash on pickup.", place: "Vieux-Fort Independence Square, Vieux-Fort" }
     },
     defaultShipping: "delivery",
     shippingKey: "or-shipping-v1",
-    deliveryText: "Islandwide delivery in Saint Lucia, 2–3 days, or free pickup. Cash on delivery or pickup.",
+    deliveryText: "Islandwide delivery in Saint Lucia, 2–3 days, or free pickup at Vieux-Fort Independence Square. Cash on delivery or pickup.",
     maxQty: 20,
     maxLines: 30,
     storageKey: "or-order-v1",
@@ -52,6 +53,9 @@
   function money(n) {
     return OR_CONFIG.currency + (Math.round(n * 100) / 100).toFixed(2);
   }
+  function ec(n) {
+    return "EC$" + (Math.round(n * OR_CONFIG.ecRate * 100) / 100).toFixed(2);
+  }
   function feeText(method) {
     var m = OR_CONFIG.shipping[method];
     return m.fee > 0 ? money(m.fee) : "Free";
@@ -60,6 +64,7 @@
   /* ---------- fill config-driven text (delivery fee etc.) ---------- */
   $$("[data-or='delivery-fee']").forEach(function (el) { el.textContent = money(OR_CONFIG.shipping.delivery.fee); });
   $$("[data-or='delivery-text']").forEach(function (el) { el.textContent = OR_CONFIG.deliveryText; });
+  $$("[data-or='ec-rate']").forEach(function (el) { el.textContent = OR_CONFIG.ecRate.toFixed(2); });
   $$("[data-or='year']").forEach(function (el) { el.textContent = String(new Date().getFullYear()); });
 
   /* ---------- hide images that fail to load (no inline onerror under strict CSP) ---------- */
@@ -161,9 +166,14 @@
     var ship = OR_CONFIG.shipping[shipping];
     var pay = shipping === "pickup" ? "cash on pickup" : "cash on delivery";
     if (allPriced) lines.push("Subtotal: " + money(subtotal));
-    lines.push("Shipping & handling: " + ship.label + " – " + feeText(shipping));
+    lines.push("Shipping & handling: " + ship.label + " – " + feeText(shipping) + (ship.place ? " (" + ship.place + ")" : ""));
     lines.push("(Pickup – Free · Delivery – " + money(OR_CONFIG.shipping.delivery.fee) + ")");
-    lines.push(allPriced ? "*TOTAL: " + money(subtotal + ship.fee) + "* (" + pay + ")" : "*TOTAL: to confirm* (" + pay + ")");
+    if (allPriced) {
+      lines.push("*TOTAL: " + money(subtotal + ship.fee) + "* (" + pay + ")");
+      lines.push("EC$ equivalent: " + ec(subtotal + ship.fee) + " (at " + OR_CONFIG.ecRate.toFixed(2) + ")");
+    } else {
+      lines.push("*TOTAL: to confirm* (" + pay + ")");
+    }
     lines.push("");
     lines.push("My name: ");
     if (shipping === "delivery") lines.push("Delivery area: ");
@@ -181,7 +191,7 @@
     $("#ob-items").textContent = count + (count === 1 ? " item" : " items") + " · " + nStyles + (nStyles === 1 ? " design" : " designs");
     var allPriced = order.every(function (l) { return l.price !== null; });
     var sub = order.reduce(function (n, l) { return n + (l.price || 0) * l.qty; }, 0);
-    $("#ob-total").textContent = allPriced ? money(sub + OR_CONFIG.shipping[shipping].fee) + " total" : "Total to confirm";
+    $("#ob-total").textContent = allPriced ? money(sub + OR_CONFIG.shipping[shipping].fee) + " · " + ec(sub + OR_CONFIG.shipping[shipping].fee) : "Total to confirm";
     var send = $("#ob-send");
     if (count > 0) send.href = "https://wa.me/" + OR_CONFIG.whatsappNumber + "?text=" + encodeURIComponent(buildMessage());
     bar.classList.toggle("visible", count > 0);
@@ -257,6 +267,7 @@
       $("#sum-delivery-label").textContent = OR_CONFIG.shipping[shipping].label;
       $("#sum-delivery").textContent = feeText(shipping);
       $("#sum-total").textContent = allPriced ? money(subtotal + OR_CONFIG.shipping[shipping].fee) : "To confirm";
+      $("#sum-total-ec").textContent = allPriced ? ec(subtotal + OR_CONFIG.shipping[shipping].fee) : "To confirm";
       sendEl.href = "https://wa.me/" + OR_CONFIG.whatsappNumber + "?text=" + encodeURIComponent(buildMessage());
       sendEl.removeAttribute("aria-disabled");
       sendEl.removeAttribute("tabindex");
@@ -392,6 +403,7 @@
     $(".op-qty-minus", card).disabled = dr.qty <= 1;
     $(".op-qty-plus", card).disabled = dr.qty >= OR_CONFIG.maxQty;
     $(".op-subtotal-amount", card).textContent = price === null ? "To confirm" : money(price * dr.qty);
+    $(".op-subtotal-ec", card).textContent = price === null ? "" : "≈ " + ec(price * dr.qty) + " (at " + OR_CONFIG.ecRate.toFixed(2) + ")";
     var exists = dr.size && linesFor(d.id).some(function (l) { return l.size === dr.size; });
     $(".op-add-text", card).textContent = exists ? "Update order" : "Add to order";
   }
@@ -462,7 +474,10 @@
 
     var sub = el("div", "op-subtotal");
     sub.appendChild(el("span", "op-subtotal-label", "Subtotal"));
-    sub.appendChild(el("span", "op-subtotal-amount", ""));
+    var amt = el("span", "op-subtotal-amounts");
+    amt.appendChild(el("span", "op-subtotal-amount", ""));
+    amt.appendChild(el("span", "op-subtotal-ec", ""));
+    sub.appendChild(amt);
     panel.appendChild(sub);
 
     var add = el("button", "btn btn-solid btn-block op-add"); add.type = "button";
@@ -494,7 +509,7 @@
       var next = card._draft.qty + delta;
       if (next < 1 || next > OR_CONFIG.maxQty) return;
       card._draft.qty = next; panelSync(card);
-      announce("Quantity " + next + ". Subtotal " + $(".op-subtotal-amount", card).textContent + ".");
+      announce("Quantity " + next + ". Subtotal " + $(".op-subtotal-amount", card).textContent + ", " + $(".op-subtotal-ec", card).textContent.replace("≈ ", "about ") + ".");
       if ((delta < 0 ? minus : plus).disabled) (delta < 0 ? plus : minus).focus();
     }
     minus.addEventListener("click", function () { step(-1); });
