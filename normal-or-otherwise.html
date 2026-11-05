@@ -150,11 +150,13 @@
 
       <!-- ================= DESIGN CARD TEMPLATE =================
            data-id:        the slot id, e.g. normal-or-otherwise-01 (also the image file name)
-           data-price:     number only, e.g. 85 (currency is set in assets/js/or.js);
-                           leave empty to show "Price to be confirmed"
-           data-sizes:     optional, e.g. "S,M,L" (leave out to offer S to 2XL)
-           data-teepublic: full https://www.teepublic.com/... link (leave empty to hide the button)
-           product-desc:   the longer description, shown only in the details window
+           data-price:     one price for every size, number only, e.g. 85
+                           (currency is set once in assets/js/or.js). Empty = "Price to be confirmed"
+           data-prices:    OPTIONAL per-size prices, e.g. "2XL:95" or "S:85,M:85,L:85,XL:85,2XL:95"
+                           (any size not listed uses data-price)
+           data-sizes:     OPTIONAL, e.g. "S,M,L" (leave out to offer S to 2XL)
+           data-teepublic: full https://www.teepublic.com/... link.
+                           Empty = the Buy on TeePublic button shows greyed out.
         <li>
           <article class="product" data-id="normal-or-otherwise-01" data-price="" data-teepublic="">
             <div class="product-media">
@@ -164,11 +166,11 @@
               </picture>
             </div>
             <div class="product-body">
-              <p class="product-num">01</p>
+              <p class="product-num">Design 01</p>
               <h3 class="product-name">DESIGN NAME</h3>
+              <p class="product-desc">ONE OR TWO SENTENCES ABOUT THE DESIGN</p>
               <p class="product-price"></p>
-              <div class="product-desc" hidden><p>DESIGN DESCRIPTION</p></div>
-              <button type="button" class="card-open" aria-haspopup="dialog">View details<span class="vh"> for DESIGN NAME</span></button>
+              <p class="size-dots"></p>
             </div>
           </article>
         </li>
@@ -180,7 +182,7 @@
           <article class="product is-coming">
             <div class="product-media is-empty"><span>Coming soon</span></div>
             <div class="product-body">
-              <p class="product-num">01</p>
+              <p class="product-num">Design 01</p>
               <p class="product-coming">Design coming soon</p>
             </div>
           </article>
@@ -191,7 +193,7 @@
           <article class="product is-coming">
             <div class="product-media is-empty"><span>Coming soon</span></div>
             <div class="product-body">
-              <p class="product-num">02</p>
+              <p class="product-num">Design 02</p>
               <p class="product-coming">Design coming soon</p>
             </div>
           </article>
@@ -202,7 +204,7 @@
           <article class="product is-coming">
             <div class="product-media is-empty"><span>Coming soon</span></div>
             <div class="product-body">
-              <p class="product-num">03</p>
+              <p class="product-num">Design 03</p>
               <p class="product-coming">Design coming soon</p>
             </div>
           </article>
@@ -213,7 +215,7 @@
           <article class="product is-coming">
             <div class="product-media is-empty"><span>Coming soon</span></div>
             <div class="product-body">
-              <p class="product-num">04</p>
+              <p class="product-num">Design 04</p>
               <p class="product-coming">Design coming soon</p>
             </div>
           </article>
@@ -224,7 +226,7 @@
           <article class="product is-coming">
             <div class="product-media is-empty"><span>Coming soon</span></div>
             <div class="product-body">
-              <p class="product-num">05</p>
+              <p class="product-num">Design 05</p>
               <p class="product-coming">Design coming soon</p>
             </div>
           </article>
@@ -235,7 +237,7 @@
           <article class="product is-coming">
             <div class="product-media is-empty"><span>Coming soon</span></div>
             <div class="product-body">
-              <p class="product-num">06</p>
+              <p class="product-num">Design 06</p>
               <p class="product-coming">Design coming soon</p>
             </div>
           </article>
@@ -288,28 +290,6 @@
 
 </main>
 
-<dialog id="product-dialog" class="pd" aria-labelledby="pd-title">
-  <div class="pd-inner">
-    <button type="button" class="close-btn pd-close" data-close-dialog aria-label="Close design details">&times;</button>
-    <div id="pd-media" class="pd-media is-empty"></div>
-    <div class="pd-body">
-      <p class="label">OR-NORMAL COLLECTION</p>
-      <h2 id="pd-title"></h2>
-      <p id="pd-price" class="pd-price"></p>
-      <div id="pd-desc" class="pd-desc"></div>
-      <fieldset id="pd-fieldset" class="sizes" aria-describedby="pd-error">
-        <legend>Size</legend>
-        <div id="pd-sizes" class="size-row"></div>
-      </fieldset>
-      <p id="pd-error" class="size-error" hidden>Choose a size first.</p>
-      <button type="button" id="pd-add" class="btn btn-solid btn-block">Add to WhatsApp order</button>
-      <p id="pd-added" class="added-note" hidden><span id="pd-added-text"></span> <button type="button" id="pd-view-order" class="link-btn">View order</button></p>
-      <a id="pd-teepublic" class="btn btn-block" target="_blank" rel="noopener noreferrer" hidden>Buy on TeePublic<span class="vh"> (opens TeePublic in a new tab)</span></a>
-      <p class="cart-note"><span data-or="delivery-text">Islandwide delivery in Saint Lucia, 2&ndash;3 days. Cash on delivery.</span> Outside Saint Lucia? Use Buy on TeePublic where shown.</p>
-    </div>
-  </div>
-</dialog>
-
 <footer class="site-footer on-dark">
   <div class="wrap">
     <div class="footer-grid">
@@ -351,6 +331,15 @@
   </div>
   <a class="wa-float" href="https://wa.me/17587235872?text=Hi%20ODD%20RIGGING%2C%20I%20have%20a%20question." target="_blank" rel="noopener noreferrer" aria-label="Chat with ODD RIGGING on WhatsApp"><svg aria-hidden="true" focusable="false"><use href="assets/icons/icons.svg#i-whatsapp"></use></svg></a>
 </footer>
+
+<div id="order-bar" class="order-bar">
+  <div class="ob-summary">
+    <p id="ob-items" class="ob-items"></p>
+    <p id="ob-total" class="ob-total"></p>
+  </div>
+  <button type="button" class="ob-review" data-open="cart" aria-haspopup="dialog" aria-expanded="false">Review</button>
+  <a id="ob-send" class="ob-send" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" focusable="false"><use href="assets/icons/icons.svg#i-whatsapp"></use></svg>Send order<span class="vh"> on WhatsApp (opens WhatsApp)</span></a>
+</div>
 
 <dialog id="cart-dialog" class="sheet" aria-labelledby="cart-title">
   <div class="sheet-inner">
