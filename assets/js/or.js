@@ -53,9 +53,11 @@
   function money(n) {
     return OR_CONFIG.currency + (Math.round(n * 100) / 100).toFixed(2);
   }
+  // EC$ equivalent, rounded UP to the next whole dollar (never under-quotes the US$ price)
   function ec(n) {
-    return "EC$" + (Math.round(n * OR_CONFIG.ecRate * 100) / 100).toFixed(2);
+    return "EC$" + String(Math.ceil(n * OR_CONFIG.ecRate - 0.000001));
   }
+  function ecNote() { return "at " + OR_CONFIG.ecRate.toFixed(2) + ", rounded up"; }
   function feeText(method) {
     var m = OR_CONFIG.shipping[method];
     return m.fee > 0 ? money(m.fee) : "Free";
@@ -170,7 +172,7 @@
     lines.push("(Pickup – Free · Delivery – " + money(OR_CONFIG.shipping.delivery.fee) + ")");
     if (allPriced) {
       lines.push("*TOTAL: " + money(subtotal + ship.fee) + "* (" + pay + ")");
-      lines.push("EC$ equivalent: " + ec(subtotal + ship.fee) + " (at " + OR_CONFIG.ecRate.toFixed(2) + ")");
+      lines.push("EC$ equivalent: " + ec(subtotal + ship.fee) + " (" + ecNote() + ")");
     } else {
       lines.push("*TOTAL: to confirm* (" + pay + ")");
     }
@@ -352,7 +354,9 @@
       else prices[s] = typeof OR_CONFIG.prices[s] === "number" ? OR_CONFIG.prices[s] : null;
     });
     var tp = (card.getAttribute("data-teepublic") || "").trim();
+    var color = (card.getAttribute("data-color") || "").trim().slice(0, 30);
     return {
+      color: color,
       id: /^[a-z0-9-]+$/.test(id) ? id : "",
       name: nameEl ? nameEl.textContent.trim() : "",
       sizes: sizes, prices: prices,
@@ -403,7 +407,7 @@
     $(".op-qty-minus", card).disabled = dr.qty <= 1;
     $(".op-qty-plus", card).disabled = dr.qty >= OR_CONFIG.maxQty;
     $(".op-subtotal-amount", card).textContent = price === null ? "To confirm" : money(price * dr.qty);
-    $(".op-subtotal-ec", card).textContent = price === null ? "" : "≈ " + ec(price * dr.qty) + " (at " + OR_CONFIG.ecRate.toFixed(2) + ")";
+    $(".op-subtotal-ec", card).textContent = price === null ? "" : "≈ " + ec(price * dr.qty) + " (" + ecNote() + ")";
     var exists = dr.size && linesFor(d.id).some(function (l) { return l.size === dr.size; });
     $(".op-add-text", card).textContent = exists ? "Update order" : "Add to order";
   }
@@ -432,7 +436,10 @@
     panel.setAttribute("aria-label", "Choose size and quantity for " + d.name);
 
     var head = el("div", "op-header");
-    head.appendChild(el("p", "op-title", "Choose your size & qty"));
+    var titleBox = el("div", "");
+    titleBox.appendChild(el("p", "op-title", "Choose your size & qty"));
+    if (d.color) titleBox.appendChild(el("p", "op-color", "Color: " + d.color + " only"));
+    head.appendChild(titleBox);
     var x = el("button", "op-close", "×"); x.type = "button";
     x.setAttribute("aria-label", "Close size and quantity for " + d.name);
     x.addEventListener("click", function () { closePanel(card, true); });
@@ -532,12 +539,22 @@
   }
 
   $$(".product[data-id]").forEach(function (card, idx) {
+    // Designs not ready yet: greyed out, no ordering. Delete data-status="coming-soon" to switch a design on.
+    if (card.getAttribute("data-status") === "coming-soon") {
+      card.classList.add("is-coming");
+      var pe = $(".product-price", card); if (pe) pe.textContent = "Coming soon";
+      var m = $(".product-media", card);
+      if (m) { var badge = el("span", "coming-badge", "Coming soon"); badge.setAttribute("aria-hidden", "true"); m.appendChild(badge); }
+      return;
+    }
     var d = parseCard(card);
     if (!d.id || !d.name) return;
     card._or = d;
     // cart/WhatsApp name includes the collection, so "Design 04" in two collections can't be confused
     var kicker = $(".ch-kicker");
-    d.cartName = (d.name + (kicker ? " · " + kicker.textContent.trim() : "")).slice(0, 100);
+    d.cartName = (d.name + (d.color ? " – " + d.color : "") + (kicker ? " · " + kicker.textContent.trim() : "")).slice(0, 100);
+    var colorEl = $(".product-color", card);
+    if (colorEl) colorEl.textContent = d.color ? "Color: " + d.color : "";
 
     var priceEl = $(".product-price", card);
     if (priceEl) priceEl.textContent = priceLabel(d);
